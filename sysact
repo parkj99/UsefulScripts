@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# A bemenu wrapper script for system functions, modified for Wayland and Sway.
+
+case "$(printf "sleep\ndisplayoff\n" | bemenu -i -p 'Action: ' -l 10)" in
+	'sleep') systemctl hybrid-sleep ;;
+	'displayoff') swaymsg "output * dpms off" ;;
+	*) exit 1 ;;
+esac
+

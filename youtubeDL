@@ -1,0 +1,21 @@
+To convert your script to work with Wayland and bemenu, you need to replace dmenu with bemenu. Here's your modified script:
+
+sh
+
+#!/bin/sh
+
+# A bemenu wrapper script for downloading presently watched video and organizing them into distinct folders within ~/Videos
+
+archive_file="$HOME/Videos/archive"
+# Prompt the URL
+video_url=$(echo "" | bemenu -p "Enter the URL of the video you'd like to download. CTRL-Y to paste")
+
+videos_dir="$HOME/Videos/"
+subfolders=$(find "$videos_dir" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort)
+selected_folder=$(echo -e "$subfolders" | bemenu -p "Select destination folder for download:")
+
+destination="$videos_dir$selected_folder/"
+
+echo "Downloading video to $destination"
+yt-dlp --download-archive "$archive_file" -P "${destination}" "$video_url"
+echo "Download complete!"
